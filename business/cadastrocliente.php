@@ -7,6 +7,7 @@
 	 $nome = $_POST['nome'];
 	 $cnpj_num = $_POST['cnpj_num'];
 	 $cpf_num = $_POST['cpf_num'];
+	 $rg = $_POST['rg'];
 	 $data_nasc = $_POST['data'];
 	 $telefone = $_POST['telefone'];
 	 $email = $_POST['email'];
@@ -23,6 +24,47 @@
 	 }
 
 	 $db = open_database();
+	 if ($db) {
+	 	$select = $db->query("SELECT * FROM empresa WHERE cnpj = '$empresa'");
+
+	 	if($select->num_rows >0){
+			$found = array();
+    		while ($row = $select->fetch_assoc()) {
+      			array_push($found, $row);
+      		}
+      		$uf_empresa = $found[0]['uf'];
+      		echo $uf_empresa;
+		}else{
+			echo"<script language='javascript' type='text/javascript'>alert('A empresa selecionada não está cadastrada!');window.location.href='../view/cadastrocliente.php';</script>";
+			die();
+		}	
+   	 }
+
+   	 if($uf_empresa == 'PR'){
+
+		$ano_atual = date('Y');
+		$mes_atual = date('m');
+		$dia_atual = date('d');
+
+		$ano = date('Y', strtotime($data_nasc));
+		$mes = date('m', strtotime($data_nasc));
+		$dia = date('d', strtotime($data_nasc));
+
+	 	if($mes_atual >= $mes){
+	 		if($dia_atual >= $dia){
+	 	 		$aux = 0;
+	 	 	}
+	 	}else{
+	 		$aux = 1;
+	 	}
+  	 	
+  	 	$idade_cliente = $ano_atual - $ano - $aux;
+
+  	 	if($idade_cliente < 18){
+  	 		echo"<script language='javascript' type='text/javascript'>alert('Clientes cadastrados para essa empresa devem ter no mínimo 18 anos!');window.location.href='../view/cadastrocliente.php';</script>";
+			die();
+  	 	}  	 	
+   	 }
 
 	 if ($db) {
 	 	$select = $db->query("SELECT * FROM cliente WHERE cpf_cnpj = '$cpf_cnpj_num'");
@@ -34,7 +76,7 @@
 		}
 		else 
 		{
-			$query = "INSERT INTO cliente (cpf_cnpj, empresa, nome,data_nasc, email, cep, cidade, uf, rua, numero) VALUES ('$cpf_cnpj_num','$empresa','$nome','$data_nasc','$email','$cep','$cidade','$uf','$rua','$numero')";
+			$query = "INSERT INTO cliente (cpf_cnpj, empresa, nome, rg, data_nasc, email, cep, cidade, uf, rua, numero) VALUES ('$cpf_cnpj_num','$empresa','$nome','$rg','$data_nasc','$email','$cep','$cidade','$uf','$rua','$numero')";
 			$insert =$db->query($query);
 			if($insert)
 			{
