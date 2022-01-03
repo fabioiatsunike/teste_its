@@ -8,7 +8,7 @@
 	 $cnpj_num = $_POST['cnpj_num'];
 	 $cpf_num = $_POST['cpf_num'];
 	 $data_nasc = $_POST['data'];
-	 $telefone = $_POST['telefone,'];
+	 $telefone = $_POST['telefone'];
 	 $email = $_POST['email'];
 	 $cep = $_POST['cep'];
 	 $cidade = $_POST['cidade'];
@@ -16,9 +16,6 @@
 	 $rua = $_POST['rua'];
 	 $numero = $_POST['numero'];
 
-	 echo($cpf_cnpj);
-	 echo($cpf_num);
-	 echo($cnpj_num);
 	 if ($cpf_cnpj == 'cnpj') {
 	 	$cpf_cnpj_num = $cnpj_num;
 	 }else{
